@@ -1,26 +1,124 @@
 @import "tailwindcss";
 
+/* Layout concept: one full-bleed black hero, then dish-by-dish split rows that pair each photo with its own text,
+   an add-ons board where the text sits on the photo's own orange panels, and a warm dark footer. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #070504;
+  --bg-2: #0F0B09;
+  --surface: #1A1310;
+  --text: #F6EBDD;
+  --text-2: #B9A793;
+  --accent: #E0733A;
+  --accent-ink: #120A06;
+  --gold: #F4B942;
+  --line: #2E221A;
+  --gut: clamp(1.25rem, 4vw, 4rem);
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-bg2: var(--bg-2);
+  --color-surface: var(--surface);
+  --color-ink: var(--text);
+  --color-ink2: var(--text-2);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-gold: var(--gold);
+  --color-line: var(--line);
+  --font-display: "Space Grotesk Variable", "Inter Variable", system-ui, sans-serif;
+  --font-body: "Inter Variable", system-ui, "Segoe UI", Arial, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 0.4vw + 0.9rem, 1.125rem);
+  line-height: 1.6;
+  overflow-x: clip;
+}
+
+@layer base {
+  ul, ol { list-style: none; }
+  button { cursor: pointer; }
+}
+
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.on-accent :focus-visible { outline-color: var(--accent-ink); }
+
+@layer components {
+.disp { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.03em; text-wrap: balance; }
+.num { font-variant-numeric: tabular-nums; }
+.eyebrow { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; color: var(--text-2); }
+.wrap { max-width: 1440px; margin-inline: auto; padding-inline: var(--gut); }
+.h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.25rem, 4.5vw + 0.5rem, 6rem); line-height: 0.95; letter-spacing: -0.03em; text-wrap: balance; }
+
+.btn-fill, .btn-line {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  min-height: 48px; padding: 0 1.5rem; font-weight: 600; font-size: 0.9375rem;
+  transition: background-color .2s, color .2s, border-color .2s;
+}
+.btn-fill { background: var(--accent); color: var(--accent-ink); }
+.btn-fill:hover { background: var(--gold); }
+.btn-line { border: 1px solid currentColor; }
+.btn-line:hover { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+.stepper { display: inline-flex; align-items: center; border: 1px solid currentColor; }
+.stepper button { width: 44px; height: 44px; font-size: 1.25rem; line-height: 1; transition: background-color .2s, color .2s; }
+.stepper button:hover { background: var(--accent); color: var(--accent-ink); }
+.on-accent .stepper button:hover { background: var(--accent-ink); color: var(--text); }
+.stepper span { min-width: 2rem; text-align: center; font-weight: 600; }
+
+/* skeleton shimmer for photo blocks */
+.skel {
+  background: linear-gradient(90deg, #17100c 0%, #241912 50%, #17100c 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+/* hero rise-in */
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+
+/* add-ons board: text positioned on the photo's own orange panels, scaled to the photo */
+.board { container-type: inline-size; position: relative; aspect-ratio: 1408 / 768; background: #1c1f24; overflow: hidden; }
+.board-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.board-panel { position: absolute; color: var(--accent-ink); }
+.board-l { left: 0; top: 13.8%; width: 26.4%; height: 68.4%; }
+.board-r { right: 0; top: 13.8%; width: 26.8%; height: 68.4%; }
+.board-row { position: absolute; left: 0; right: 0; transform: translateY(-50%); padding-inline: 8%; display: flex; flex-direction: column; gap: 0.9cqw; align-items: flex-start; }
+.board-line { display: flex; align-items: center; gap: 1.6cqw; }
+.board-name { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.03em; font-size: 2.6cqw; line-height: 1; }
+.board-price { font-weight: 700; font-size: 2cqw; line-height: 1; font-variant-numeric: tabular-nums; }
+.board-btn { display: inline-flex; align-items: center; justify-content: center; border: 1.5px solid var(--accent-ink); font-weight: 700; font-size: max(1.5cqw, 0.875rem); padding: 0.9cqw 1.8cqw; min-height: max(3.6cqw, 40px); transition: background-color .2s, color .2s; }
+.board-btn:hover { background: var(--accent-ink); color: var(--text); }
+.board-step { display: inline-flex; align-items: center; border: 1.5px solid var(--accent-ink); font-size: 1.8cqw; }
+.board-step button { width: 3.6cqw; height: 3.6cqw; min-width: 28px; min-height: 28px; font-size: 2.2cqw; line-height: 1; }
+.board-step button:hover { background: var(--accent-ink); color: var(--text); }
+.board-step span { min-width: 3cqw; text-align: center; font-weight: 700; }
+.board-stack { display: none; width: 100%; }
+
+@media (max-width: 900px) {
+  .board-panel { display: none; }
+  .board { aspect-ratio: auto; display: flex; flex-direction: column; background: var(--accent); }
+  .board-img { position: static; aspect-ratio: 1408 / 768; height: auto; }
+  .board-stack { display: block; }
+}
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
