@@ -53,6 +53,13 @@ const DISHES: Dish[] = [
     ],
     flip: true,
   },
+  {
+    title: "Chicken and Chips",
+    src: "/images/chicken-and-chips.webp",
+    alt: "Crispy fried chicken pieces on a pile of chips in an open brown takeaway box, steam rising, with coarse salt scattered on a dark wooden counter.",
+    position: "42% 55%",
+    rows: [{ id: "cc" }],
+  },
 ];
 
 function DishRow({ id, label, title }: Row & { title: string }) {
@@ -124,8 +131,8 @@ export function Menu() {
       <div className="wrap mt-[clamp(3rem,7vw,6rem)]">
         <AnimatedContent distance={50} duration={0.8} threshold={0.15}>
           <p className="eyebrow">More plates</p>
-          <ul className="mt-4 grid border-t border-line md:grid-cols-3">
-            {["cc", "nh", "ns"].map((id) => {
+          <ul className="mt-4 grid border-t border-line md:grid-cols-2">
+            {["nh", "ns"].map((id) => {
               const it = ITEMS[id];
               return (
                 <li key={id} className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-line py-6 md:border-r md:px-6 md:first:pl-0 md:last:border-r-0 md:last:pr-0">
