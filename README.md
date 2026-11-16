@@ -5,10 +5,10 @@ Next.js (App Router) + Tailwind + React Bits. Orders go to WhatsApp (0704 524 79
 ## Run
     npm install
     npm run dev        # http://localhost:3000
-    npm run build && npm start
+    npm run build   # writes the static site to ./out
 
 ## Deploy
-Push to GitHub and import into Vercel, or run `npx vercel`. No environment variables are needed.
+Render Static Site (below), or Vercel / Netlify. No environment variables are needed.
 
 ## Where things are
 - `lib/menu.ts`: every dish, price and the WhatsApp number. Change prices here.
@@ -22,8 +22,9 @@ Push to GitHub and import into Vercel, or run `npx vercel`. No environment varia
 React Bits is MIT + Commons Clause (see `components/reactbits/LICENSE.md`). Using it on this website is fine.
 Do not resell this project, or the React Bits components inside it, as a template or kit.
 
-## Deploy on Render
-1. New > Web Service, connect this GitHub repo (or New > Blueprint to use `render.yaml`).
-2. Runtime: Node. Build command: `npm ci && npm run build`. Start command: `npm start`.
-3. Set `NODE_VERSION` to `22`. No other environment variables are needed.
-Render sets `PORT` automatically and `next start` uses it. The free plan sleeps after inactivity, so the first visit after a quiet spell can take about a minute.
+## Deploy on Render (Static Site)
+The project exports to plain HTML, CSS and JS in `out/`, so it runs as a free Static Site that never sleeps.
+1. New > Static Site, connect this GitHub repo (or New > Blueprint to use `render.yaml`).
+2. Build command: `npm ci && npm run build`. Publish directory: `out`.
+3. Environment variable: `NODE_VERSION` = `22`. Nothing else is needed.
+To preview the built site locally: `npm run build && npx serve out`.
